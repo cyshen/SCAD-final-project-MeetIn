@@ -1,0 +1,1008 @@
+<!doctype html>
+<html>
+  <head>
+    <title>MeetIn</title>	  
+      <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+    *:focus {
+      outline: none;
+    }
+	  .canvases {
+      width:56.25%; 
+      height:90%; 
+      background-size:contain;
+      background-repeat: no-repeat;
+      border:1px solid white;
+      border-left-color: #cccccc;
+      position:absolute;
+      top:0px;
+      left:3.75%;
+    }
+    #pen {
+      height:5%;
+      width:2.5%;
+      background-image: url("icons/pencil_i.png");
+      background-color: white;
+      background-size:contain;
+      position: absolute;
+      border: none;
+      border-radius:5px;
+      background-repeat: no-repeat;
+      top:1.25%;
+      left:0.625%;
+    }
+    #pen:hover {
+      opacity:0.5;
+      /*background-color: #cccccc;*/
+    }
+    #rect {
+      height:5%;
+      width:2.5%;
+      background-image: url("icons/rect2.png");
+      background-color: white;
+      background-size:contain;
+      position: absolute;
+      border: none;
+      border-radius:5px;
+      background-repeat: no-repeat;
+      top: 7.5%;
+      left:0.625%;
+    }
+    #rect:hover {
+      opacity:0.5;
+    }
+    #circle {
+      height:5%;
+      width:2.5%;
+      background-image: url("icons/circle_i.png");
+      background-color: white;
+      background-size:contain;
+      position: absolute;
+      border: none;
+      border-radius:5px;
+      background-repeat: no-repeat;
+      top:13.75%;
+      left:0.625%;
+    }
+    #circle:hover {
+      opacity:0.5;
+      /*background-color: #cccccc;*/
+    }
+    #marker {
+      height:5%;
+      width:2.5%;
+      background-image: url("icons/marker_i.png");
+      background-color: white;
+      background-size:contain;
+      position: absolute;
+      border: none;
+      border-radius:5px;
+      background-repeat: no-repeat;
+      top:20%;
+      left:0.625%;
+    }
+    #marker:hover {
+      opacity:0.5;
+      /*background-color: #cccccc;*/
+    }
+    #eraser {
+      height:5%;
+      width:2.5%;
+      background-image: url("icons/eraser_i.png");
+      background-color: white;
+      background-size:contain;
+      position: absolute;
+      border: none;
+      border-radius:5px;
+      background-repeat: no-repeat;
+      top:26.25%;
+      left:0.625%;
+    }
+    #eraser:hover {
+      opacity:0.5;
+      /*background-color: #cccccc;*/
+    }
+    #green {
+      height:2.5%;
+      width:1.25%;
+      background-color: green;
+      position: absolute;
+      border: none;
+      border-radius:5px;
+      top:38.75%;
+      left:0.625%;
+    }
+    #blue {
+      height:2.5%;
+      width:1.25%;
+      background-color: blue;
+      position: absolute;
+      border: none;
+      border-radius:5px;
+      top:38.75%;
+      left:1.875%;
+    }
+    #red {
+      height:2.5%;
+      width:1.25%;
+      background-color: red;
+      position: absolute;
+      border: none;
+      border-radius:5px;
+      top:41.25%;
+      left:0.625%;
+    }
+    #yellow {
+      height:2.5%;
+      width:1.25%;
+      background-color: yellow;
+      position: absolute;
+      border: none;
+      border-radius:5px;
+      top:41.25%;
+      left:1.875%;
+    }
+    #orange {
+      height:2.5%;
+      width:1.25%;
+      background-color: orange;
+      position: absolute;
+      border: none;
+      border-radius:5px;
+      top:43.75%;
+      left:0.625%;
+    }
+    #indigo {
+      height:2.5%;
+      width:1.25%;
+      background-color: indigo;
+      position: absolute;
+      border: none;
+      border-radius:5px;
+      top:43.75%;
+      left:1.875%;
+    }
+    #violet {
+      height:2.5%;
+      width:1.25%;
+      background-color: #33ccff;
+      position: absolute;
+      border: none;
+      border-radius:5px;
+      top:46.25%;
+      left:0.625%;
+    }
+    #black {
+      height:2.5%;
+      width:1.25%;
+      background-color: black;
+      position: absolute;
+      border: none;
+      border-radius:5px;
+      top:46.25%;
+      left:1.875%;
+    }
+    #white {
+      height:2.5%;
+      width:1.25%;
+      background-color: white;
+      position: absolute;
+      border: 1px solid gray;
+      border-radius:5px;
+      top:48.75%;
+      left:0.625%;
+    }
+    #brown {
+      height:2.5%;
+      width:1.25%;
+      background-color: brown;
+      position: absolute;
+      border: none;
+      border-radius:5px;
+      top:48.75%;
+      left:1.875%;
+    }
+    #gray {
+      height:2.5%;
+      width:1.25%;
+      background-color: gray;
+      position: absolute;
+      border: none;
+      border-radius:5px;
+      top:51.25%;
+      left:0.625%;
+    }
+    #pink {
+      height:2.5%;
+      width:1.25%;
+      background-color: pink;
+      position: absolute;
+      border: none;
+      border-radius:5px;
+      top:51.25%;
+      left:1.875%;
+    }
+    #thick4 {
+      height:2.5%;
+      width:1.25%;
+      background-image: url("icons/circle.png");
+      background-color: white;
+      background-size:contain;
+      position: absolute;
+      border: none;
+      background-repeat: no-repeat;
+      top:32.5%;
+      left:0.625%;
+      opacity:1;
+    }
+    #thick3 {
+      height:1.875%;
+      width:0.9375%;
+      background-image: url("icons/circle.png");
+      background-color: white;
+      background-size:contain;
+      position: absolute;
+      border: none;
+      background-repeat: no-repeat;
+      top:32.8125%;
+      left:2.03125%;
+      opacity:1;
+    }
+    #thick2 {
+      height:1.25%;
+      width:0.625%;
+      background-image: url("icons/circle.png");
+      background-color: white;
+      background-size:contain;
+      position: absolute;
+      border: none;
+      background-repeat: no-repeat;
+      top:35.625%;
+      left:0.9375%;
+      opacity:1;
+    }
+    #thick1 {
+      height:0.625%;
+      width:0.3125%;
+      background-image: url("icons/circle.png");
+      background-color: white;
+      background-size:contain;
+      position: absolute;
+      border: none;
+      background-repeat: no-repeat;
+      top:35.9375%;
+      left:2.34375%;
+      opacity:1;
+    }
+    #clr {
+      height:5%;
+      width:2.5%;
+      background-image: url("icons/clear.png");
+      background-color: white;
+      background-size:100% 100%;
+      position: absolute;
+      border: none;
+      top:55.25%;
+      left:0.625%;
+    }
+    #clr:hover {
+      opacity:0.5;
+      /*background-color: #cccccc;*/
+    }
+    #download {
+      height:5%;
+      width:2.5%;
+      background-image: url("icons/download.png");
+      background-color: white;
+      background-size:100% 100%;
+      position: absolute;
+      border: none;
+      top:61.5%;
+      left:0.625%;
+    }
+    #download:hover {
+      opacity:0.5;
+      /*background-color: #cccccc;*/
+    }
+    #PDF {
+      height:5%;
+      width:2.5%;
+      position: absolute;
+      top:67.75%;
+      left:0.625%;
+      opacity:0;
+    }
+    #PDFoverlay {
+      height:5%;
+      width:2.5%;
+      background-image: url("icons/PDF.png");
+      background-color: white;
+      background-size:100% 100%;
+      position: absolute;
+      border: none;
+      top:67.75%;
+      left:0.625%;
+    }
+    #photo {
+      height:5%;
+      width:2.5%;
+      position: absolute;
+      top:74%;
+      left:0.625%;
+      opacity:0;
+    }
+    #photooverlay {
+      height:5%;
+      width:2.5%;
+      background-image: url("icons/photo.png");
+      background-color: white;
+      background-size:100% 100%;
+      position: absolute;
+      border: none;
+      top:74%;
+      left:0.625%;
+    }
+    #photooverlay:hover {
+      opacity:0.5;
+      /*background-color: #cccccc;*/
+    }
+    #prev {
+      height:5%;
+      width:2.5%;
+      background-image: url("icons/prev.png");
+      background-color: white;
+      background-size:100% 100%;
+      position: absolute;
+      border: none;
+      top:80.25%;
+      left:0.625%;
+    }
+    #prev:hover {
+      opacity:0.5;
+      /*background-color: #cccccc;*/
+    }
+    #next {
+      height:5%;
+      width:2.5%;
+      background-image: url("icons/next.png");
+      background-color: white;
+      background-size:100% 100%;
+      position: absolute;
+      border: none;
+      top:86.5%;
+      left:0.625%;
+    }
+    #next:hover {
+      opacity:0.5;
+      /*background-color: #cccccc;*/
+    }
+    #BGs {
+      width:56.25%;
+      height:10%;
+      background-size:100% 100% ;
+      background-color: #595959;
+      border: none;
+      position:absolute;
+      top:90%;
+      left:3.75%;
+    }
+    #whiteboard{
+	border-radius: 20px;
+      width:40%;
+      height:20%;
+      float:right;  
+      top:0%;
+      left:60%; 
+      background-color:#DEDEDE;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-image: url("wbbg.png");
+      position:absolute;
+      border:none;
+	    padding:10px;
+	    font-size:20px;
+    }
+      #m{ 
+      /*(border: 2px solid black;*/ 
+        border: none;
+        padding: 10px; 
+        width: 35%;
+        height:5%; 
+        position: absolute; 
+        bottom: 0;
+        top:95%;
+        left:60%; 
+        background-color: #82B5A6;
+	border-radius: 10px;
+
+      }
+      #send{ 
+        width: 5%;  
+        height:5%;
+        background: #2E403B;
+        border-radius: 10px;
+        color:white;         
+        padding: 10px; 
+        position: absolute; 
+        bottom: 0;
+        right:0px;
+        border: none;
+	font-size: 14px;
+	font-weight: bold;
+      }
+      #send:hover{
+        opacity: 0.7; 
+      }
+      #message_block{
+	border-radius: 20px;
+        width:40%;
+        height:75%;
+        position: absolute;
+        top:20%;
+        left:60%;
+        margin-bottom:10px;
+        overflow:auto;
+        /*background-image: url("wallpaper.jpg");*/
+        background: #d9d9d9;
+        background-image: url("chatback.jpg");
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        float:right;
+        /*border:3px #cccccc dashed;*/
+        left-margin:1000px
+      }
+      #messages { 
+        list-style-type: none; 
+        margin: 10px; 
+        padding: 0; 
+      }
+      #messages li { 
+        padding: 5px 10px; 
+        font-size:16pt;
+        border-width: 10px;
+        /*background-image: url("dialog.jpg");
+        background-repeat: no-repeat;
+        background-size: 90% 70%;*/
+      }
+      /*#messages li:nth-child(odd) { 
+        background: #eee; 
+        /*background-image: url("dialog.jpg");
+      }*/
+      
+      #MyMessage{
+        /*background: #eee;*/
+        /*list-style:none; 
+        display:inline;
+        word-wrap: break-word;
+        width: 50%; *//*background: gold;overflow-wrap: break-word;*/
+        /*display: inline-block;
+        word-wrap: break-word;
+        text-align: right;
+        background-image: url("dialog.jpg");
+        background-size: 100% 120%;background-repeat: no-repeat;/*overflow-wrap: normal;*/
+        
+        display: inline-block;
+        text-align: left;
+        font-size: 14px;
+    		padding: 15px;
+    		padding-bottom: 25px;
+        word-break: break-all;
+        /*overflow-wrap: break-word;
+        word-wrap: break-word;
+        overflow-wrap: normal;*/
+        background-size: 100% 100%;
+        background-image: url("diamy.png");
+        background-repeat: no-repeat;
+      /*word-wrap: break-word;*//*overflow-wrap: normal;*/
+      }
+      #OtherMessage{
+        /*background: #eee;*/
+        /*list-style:none; 
+        display:inline;
+        word-wrap: break-word;
+        width: 50%; *//*background: gold;*/
+        margin-left:15%;
+        font-size: 14px;
+		padding: 20px;
+		padding-bottom: 15px;
+        display:inline-block;
+        background-size: 100% 100%;
+        text-align: left;
+        background-image: url("dia.png");
+        word-break: break-all;
+      /*word-wrap: break-word;*/background-repeat: no-repeat;/*overflow-wrap: normal;*/
+      }
+      .MessageBG{
+        width: 50%;
+        /*text-align: right;*/
+        /*align-content: right;*/
+        /*float: right;*/
+        /*background-image: url("dialog.jpg");
+        background-size: 100% 120%;
+        background-repeat: no-repeat;*/
+        overflow-wrap: break-word;
+        }
+    .member{
+      display:inline-block;
+    }
+    #members{
+      white-space:nowrap;
+    }
+    .bgimg:hover{
+      opacity:0.5;
+    }
+
+
+
+#img01 {
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    left:10%;
+    top:30%;
+}
+#img02{
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    left:30%;
+    top:30%;
+}
+#img03 {
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    left:50%;
+    top:30%;
+}
+#img04{
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    left:70%;
+    top:30%;
+}
+#img01:hover {opacity: 0.7;}
+#img02:hover {opacity: 0.7;}
+#img03:hover {opacity: 0.7;}
+#img04:hover {opacity: 0.7;}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 35%;
+    top: 30%;
+    width: 30%; /* Full width */
+    height: 40%; /* Full height */
+
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+}
+
+/* Modal Content (image) */
+.modal-content {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+}
+
+#myInput {
+  position:absolute;
+  top:55%;
+  left:30%; 
+  height: 15%;
+  border:none;
+  color:white;
+  background-color: black;
+  text-align:center;
+}
+
+/* Caption of Modal Image */
+#caption {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+    text-align: center;
+    color: #ccc;
+    padding: 10px 0;
+    height: 150px;
+}
+
+/* Add Animation */
+.modal-content, #caption {    
+    -webkit-animation-name: zoom;
+    -webkit-animation-duration: 0.6s;
+    animation-name: zoom;
+    animation-duration: 0.6s;
+}
+
+@-webkit-keyframes zoom {
+    from {-webkit-transform:scale(0)} 
+    to {-webkit-transform:scale(1)}
+}
+
+@keyframes zoom {
+    from {transform:scale(0)} 
+    to {transform:scale(1)}
+}
+
+#choose {
+  position: absolute;
+  top:10%;
+  left:10%;
+  color:#f1f1f1;
+  font-size: 35px;
+}
+
+/* The Close Button */
+.close {
+    position: absolute;
+    bottom: 15px;
+    right: 40%;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.close:hover,
+.close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#myModal {margin:0 auto 0 auto; text-align:center;}
+#myModal div
+{
+display:inline-block;
+float:left;
+margin-left: 100px;
+}
+
+/* 100% Image Width on Smaller Screens */
+@media only screen and (max-width: 700px){
+    .modal-content {
+        width: 100%;
+    }
+}
+    </style>
+
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+	<script  type="text/javascript" src="/test.js"></script>
+
+  </head>
+  <body>	
+  <div class="panel" style="height:100%; width:3.75%; background-color:blue;">
+    <div class="tools" id="rect" onclick="DrawMode('rect')"></div>
+    <div class="tools" id="pen" onclick="DrawMode('pen')"></div>
+    <div class="tools" id="circle" onclick="DrawMode('circle')"></div>
+    <div class="tools" id="marker" onclick="DrawMode('marker')"></div>
+    <div class="tools" id="eraser" onclick="DrawMode('eraser')"></div>
+    <div id="green" onclick="color(this)"></div>
+    <div id="blue" onclick="color(this)"></div>
+    <div id="red" onclick="color(this)"></div>
+    <div id="yellow" onclick="color(this)"></div>
+    <div id="orange" onclick="color(this)"></div>
+    <div id="indigo" onclick="color(this)"></div>
+    <div id="violet" onclick="color(this)"></div>
+    <div id="black" onclick="color(this)"></div>
+    <div id="white" onclick="color(this)"></div>
+    <div id="brown" onclick="color(this)"></div>
+    <div id="gray" onclick="color(this)"></div>
+    <div id="pink" onclick="color(this)"></div>
+    <div id="thick4" onclick="draw_width(15,this)"></div>
+    <div id="thick3" onclick="draw_width(10,this)"></div>
+    <div id="thick2" onclick="draw_width(5,this)"></div>
+    <div id="thick1" onclick="draw_width(2,this)"></div>
+    <div id="clr" onclick="clear_can()"></div>
+    <a id="download" ></a>
+    <div id="PDFoverlay"></div> 
+    <input type='file' id="PDF" onchange="readPdfURL(this);">
+    <div id="photooverlay"></div>
+    <input type='file' id="photo" onchange="readURL(this);">
+    <div id="prev"></div>
+    <div id="next"></div>
+  </div>
+	<div id="canvas_div" width="">
+        &nbsp; &nbsp;
+        <span id="page" style="position:absolute;bottom:11%; right:41%;">Page: <span id="page_num"></span> / <span id="page_count"></span></span> 
+        <canvas id="1" class="canvases" width="1000" height="1600" ></canvas> 
+				 <canvas id="can2" class="canvases" width="1000" height="1600" style="background-size:100% 100% ;border:2px solid;text-align:right; display:none"></canvas> 
+         <br>
+    </div>     
+
+		<div id="BGs">
+    </div>
+		<img id="canvasimg" style="display:none;">
+        <img id="background" style="display:none;">
+        <img id="canvasdownload" style="display:none;">
+        <textarea id="whiteboard" rows="10" cols="100">record something here...</textarea>
+  
+  <div id="message_block">
+    <ul id="messages"></ul>
+  </div>
+  <input id="m" autocomplete="off"/><br>
+  <button align="left" id="send">Send</button>
+	
+<!-- The Modal -->
+<div id="myModal" class="modal">
+  <span id="choose">Choose:</span>
+  <span id="submit" class="close">OK!</span>
+  <div><img class="modal-content" id="img01" border=none></div>
+  <div><img class="modal-content" id="img02" border=none></div>
+  <div><img class="modal-content" id="img03" border=none></div>
+  <div><img class="modal-content" id="img04" border=none></div>
+  <div id="caption"></div>
+  <input type="text" id="myInput" placeholder="Enter your name" autocomplete="off">
+</div>
+  
+  
+<script src="/pdf.js/build/pdf.js"></script>
+
+<script id="script">
+  //
+  // If absolute URL from the remote server is provided, configure the CORS
+  // header on that server.
+  //
+  //var url = '/pdf.js/web/compressed.tracemonkey-pldi-09.pdf';
+  //var url = 'http://infolab.stanford.edu/pub/papers/google.pdf';
+
+  //
+  // Disable workers to avoid yet another cross-origin issue (workers need
+  // the URL of the script to be loaded, and dynamically loading a cross-origin
+  // script does not work).
+  //
+  // PDFJS.disableWorker = true;
+
+  //
+  // In cases when the pdf.worker.js is located at the different folder than the
+  // pdf.js's one, or the pdf.js is executed via eval(), the workerSrc property
+  // shall be specified.
+  //
+  // PDFJS.workerSrc = '../../build/pdf.worker.js';
+
+      //pdfDocs = {}
+      pageNum = 1,
+      pageRendering = false,
+      pageNumPending = null,
+      scale = 1;
+      //canvas = document.getElementById('the-canvas'),
+      //ctx = canvas.getContext('2d');
+
+  /**
+   * Get page info from document, resize canvas accordingly, and render page.
+   * @param num Page number.
+   */
+	total_canvas = 1;
+  socket.on('pdfaddpage',function(data){pdfaddpage(data)
+		
+  })
+	function pdfaddpage(data){
+		pdfDocs[data.can_num].page_bg[data.page_num] = data.src
+		prevPdfCanvas[data.can_num].push('')
+		console.log("bg",pdfDocs[data.can_num].page_bg)
+
+	}
+  socket.on('pdfnextpage',function(){pdfnextpage()
+		
+  })
+
+	function pdfnextpage(){
+		var p = pdfDocs[current_canvas].page_num;
+		console.log("pagenum",p)
+		pdfDocs[current_canvas].page_info[p] = document.getElementById(current_canvas.toString()).toDataURL()
+		pdfDocs[current_canvas].page_num=pdfDocs[current_canvas].page_num+1;
+		var next_page = pdfDocs[current_canvas].page_num
+		var can = document.getElementById(current_canvas.toString())
+		can.style.backgroundImage = 'url('+pdfDocs[current_canvas].page_bg[next_page]+')'		
+		var img = new Image();
+		img.src = pdfDocs[current_canvas].page_info[next_page]
+		can.getContext('2d').clearRect(0,0,w,h)
+		can.getContext('2d').drawImage(img,0,0)
+		document.getElementById('page_num').textContent = next_page;
+		prevPdfCanvas[current_canvas][next_page] = can.toDataURL();
+		console.log('nextpage',next_page)
+		console.log("bg",pdfDocs[current_canvas].page_bg)
+	}
+  socket.on('pdfprevpage',function(data){console.log("curcan",current_canvas)
+		var p = pdfDocs[current_canvas].page_num;
+		pdfDocs[current_canvas].page_info[p] = document.getElementById(current_canvas.toString()).toDataURL()
+		pdfDocs[current_canvas].page_num=pdfDocs[current_canvas].page_num-1
+		var prev_page = pdfDocs[current_canvas].page_num
+		var can = document.getElementById(current_canvas.toString())
+		can.style.backgroundImage = 'url('+pdfDocs[current_canvas].page_bg[prev_page]+')'
+		var img = new Image();
+		img.src = pdfDocs[current_canvas].page_info[prev_page]
+		can.getContext('2d').clearRect(0,0,w,h)
+		can.getContext('2d').drawImage(img,0,0)
+		document.getElementById('page_num').textContent = prev_page;
+		console.log('prevpage',prev_page)
+		console.log("bg",pdfDocs[current_canvas].page_bg)
+
+  })
+  function renderPage(num,pdfDoc,callback) {console.log("render", pdfDoc)
+	var canvas = document.getElementById('can2');
+    var ctx2 = canvas.getContext('2d');
+    pageRendering = true;
+    // Using promise to fetch the page
+    pdfDoc.getPage(num).then(function(page) {
+      var viewport = page.getViewport(scale);
+      //canvas.height = viewport.height;
+      //canvas.width = viewport.width;
+      if (viewport.width/viewport.height >= w/h){
+          viewport.scale = scale/viewport.width*w; 
+          //viewport.height = w/viewport.width*viewport.height;
+          //viewport.width = w;
+      }
+      else {
+          viewport.scale = scale/viewport.height*h;
+          //viewport.width = h/viewport.height*viewport.width;
+          //viewport.height = h;
+      }
+      viewport = page.getViewport(viewport.scale)
+      console.log(viewport.height,viewport.width)
+
+      // Render PDF page into canvas context
+      var renderContext = {
+        canvasContext: ctx2,
+        viewport: viewport
+      };
+      var renderTask = page.render(renderContext);
+
+      // Wait for rendering to finish
+      renderTask.promise.then(function () {
+        pageRendering = false;
+        if (pageNumPending !== null) {console.log("@@@@@@")
+          // New page rendering is pending
+          pdfDoc = pdfDocs[current_canvas]
+          renderPage(pageNumPending,pdfDoc,function(res){socket.emit('addBG',res);});
+          pageNumPending = null;
+        }
+        img1 = document.getElementById('background');
+        img1.src = document.getElementById('can2').toDataURL("image/png");
+        //socket.emit('changeBG',"url("+img1.src+")");
+        ctx2.clearRect(0,0,w,h);
+		if (callback) {callback(img1.src)}
+      });
+    });
+
+    // Update page counters
+    
+ 	
+  }
+
+  /**
+   * If another page rendering in progress, waits until the rendering is
+   * finised. Otherwise, executes rendering immediately.
+   */
+  function queueRenderPage(num) {
+    if (pageRendering) {
+      pageNumPending = num;
+    } else {
+	  pdfDoc = pdfDocs[current_canvas]
+      renderPage(num,pdfDoc.data,function(res){
+		socket.emit('pdfaddpage',{'can_num':current_canvas,'page_num':num,'src':res}		
+		);
+		socket.emit('pdfnextpage')
+      });
+	}
+  }
+
+  /**
+   * Displays previous page.
+   */
+  function onPrevPage() {
+	pdfDoc = pdfDocs[current_canvas]
+    if (pdfDoc.page_num <= 1) {
+      return;
+    }
+    else socket.emit('pdfprevpage')
+  }
+  document.getElementById('prev').addEventListener('click', onPrevPage);
+
+  /**
+   * Displays next page.
+   */
+  function onNextPage() {
+	pdfDoc = pdfDocs[current_canvas]
+    if (pdfDoc.page_num >= pdfDoc.numPages) {
+      return;
+    }
+	else{
+		if (pdfDoc.page_info[pdfDoc.page_num+1]==undefined) return;
+		else if (pdfDoc.page_info[pdfDoc.page_num+1]==0) queueRenderPage(pdfDoc.page_num+1);
+		else socket.emit('pdfnextpage')
+	}
+	
+  }
+  document.getElementById('next').addEventListener('click', onNextPage);
+
+  /**
+   * Asynchronously downloads PDF.
+   */
+  function showPDF(url,can_num) {
+    PDFJS.getDocument(url).then(function (pdfDoc_) {
+	  prevPdfCanvas[can_num]=[]
+      document.getElementById('page_count').textContent = pdfDoc_.numPages;
+	  tmp=[]
+	  tmp2=[]
+	  for (i=0;i<=pdfDoc_.numPages;i++) tmp.push(0)
+	  for (i=0;i<=pdfDoc_.numPages;i++) tmp2.push(0)
+	  pdf_tmp = {'data':pdfDoc_, 'page_num': 0,'page_info':tmp, 'page_bg':tmp2}
+      pdfDocs[can_num] = pdf_tmp;
+      // Initial/first page rendering
+      renderPage(1,pdfDoc_,function(res){
+		addBG(can_num,res);
+		pdfaddpage({'can_num':can_num,'page_num':1,'src':res})
+		pdfnextpage()
+		});
+	  
+    });
+  }
+function addBG(num, src){ // add one new bg
+	console.log("addBG",num)
+			if (num!=1){
+				var new_can = document.createElement('canvas')
+				new_can.id = num.toString()
+				new_can.className = "canvases";
+				new_can.width = 1000;
+				new_can.height = 1600;
+				new_can.style.backgroundImage = 'url('+src+')';
+				new_can.style.display = "none";
+				init(new_can,num)
+				document.getElementById("canvas_div").appendChild(new_can)
+			}
+			if(num == 1 && pdf_can.indexOf(num)==-1){	console.log("firstcanvas")
+				$('#1').css("background-image",'url('+src+')');
+			}
+			if(num!=1) total_canvas++;
+			var BGs = document.getElementById('BGs') 
+			var bgimg = document.createElement('img')
+			bgimg.src = src
+			bgimg.width = 50
+      bgimg.className = "bgimg"
+			bgimg.onclick = function(){
+				socket.emit('whichCanvas',num)
+			}
+			whichCanvas(num)
+			BGs.appendChild(bgimg);
+			current_canvas = num;
+}
+
+function whichCanvas(num){ //upon click on the small images
+			console.log('whichcanvas',num+'/'+total_canvas)
+			for (j=1;j<=total_canvas;j++){
+				document.getElementById(j.toString()).style.display="none";
+			}
+			var toshow = document.getElementById(num.toString())
+			toshow.style.display="";
+			current_canvas = num;
+			if(pdf_can.indexOf(num)!=-1) {console.log("WHICH-1")
+				document.getElementById('page_count').textContent = pdfDocs[num].data.numPages
+				document.getElementById('page_num').textContent = pdfDocs[num].page_num;
+			}
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,350 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Socket.IO chat</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+
+      #m{ 
+        border: 2px solid black; 
+        padding: 10px; 
+        width: 90%; 
+        margin: .5%; 
+        position: fixed; 
+        bottom: 0;
+
+      }
+      #send{ 
+        width: 8%; 
+        margin: .5%; 
+        background: rgb(121,2,2);
+        color:white; 
+        
+        padding: 10px; 
+        position: fixed; 
+        bottom: 0;
+        right:5px;
+      }
+      #message_block{
+        width:100%;
+        position: absolute;
+        top:0;
+        bottom:5%;
+        margin-bottom:10px;
+        border: solid 2px black; 
+        overflow:auto;
+      }
+      #messages { 
+        list-style-type: none; 
+        margin: 10px; 
+        
+        padding: 0; 
+      }
+      #messages li { 
+        padding: 5px 10px; 
+        font-size:16pt;
+      }
+      #messages li:nth-child(odd) { 
+        background: #eee; 
+      }
+
+      #download {
+        float:left;
+        cursor:pointer;
+        color:#ccc;
+        padding:3px;
+      }
+      #download:hover {
+        color:#000;
+      }
+
+      /*canvas {
+          /*position: relative;
+          top: -500px;
+          width: 780px;
+          height: 500px;
+      }*/
+      #can {
+          /*position: relative;*/
+          top: -500px;
+          width: 780px;
+          height: 500px;
+      }
+      #can2 {
+          /*position: relative;*/
+          top: -500px;
+          width: 780px;
+          height: 500px;
+      }
+      iframe {
+          /*position: relative;*/
+          width: 800px;
+          height: 500px;
+      }
+      #pasteModalArea {
+        position: absolute;
+        width: 0;
+        height: 0;
+        top: -20px;
+        left: -20px;
+      }
+    </style>
+
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+		<script  type="text/javascript" src="/test.js"></script>
+    <script>
+    /*  var position;
+      $(window).scroll(function () {
+        top.updateScrollPosition($('body').scrollTop(), $('body').scrollLeft());
+        position = $('#frame').contents().scrollTop();
+        console.log(position);
+      });
+      var topPos;
+      var leftPos;
+
+      function updateScrollPosition(top, left) {
+        topPos = top;
+        leftPos = left;
+        //console.log(topPos);
+      }*/
+    </script>
+
+
+  </head>
+  <body>	
+		<div align="right" style="right-border:50%; width:50%;height:100%; float:right"> 
+
+        <!-- <iframe id="frame"src="http://infolab.stanford.edu/pub/papers/google.pdf"></iframe> -->
+        <!-- <iframe id="frame"src="/Lab13.pdf"></iframe> -->
+				<canvas id="can" width="1600" height="1000" style="background-size:100% 100% ;border:2px solid;text-align:right"></canvas>
+        <canvas id="can2" width="1600" height="1000" style="background-size:100% 100% ;border:2px solid;text-align:right; display:none"></canvas> 
+        <input type='file' onchange="readPdfURL(this);" />
+        <button id="prev">Previous</button>
+        <button id="next">Next</button>
+        <button id="+">+</button>
+        <button id="-">-</button>
+        &nbsp; &nbsp;
+        <span>Page: <span id="page_num"></span> / <span id="page_count"></span></span>
+        <!--<canvas id="the-canvas" style="border:1px solid black"></canvas> -->        
+        <a id="download">Download as image</a>
+        <div style="width:20px;height:20px;background:green;" id="green" onclick="color(this)"></div>
+        <div style="width:20px;height:20px;background:blue;" id="blue" onclick="color(this)"></div>
+        <div style="width:20px;height:20px;background:red;" id="red" onclick="color(this)"></div>
+        <div style="width:20px;height:20px;background:yellow;" id="yellow" onclick="color(this)"></div>
+        <div style="width:20px;height:20px;background:orange;" id="orange" onclick="color(this)"></div>
+        <div style="width:20px;height:20px;background:black;" id="black" onclick="color(this)"></div>
+        <div style="">Eraser</div>
+        <div style="width:30px;height:30px;background:white;border:2px solid;" id="white" onclick="color(this)"></div>
+        <img id="canvasimg" style="" style="display:none;">
+        <img id="background" style="display:none;">
+        <img id="canvasdownload" style="display:none;">
+        <input type="button" value="save" id="btn" size="30" onclick="save()" style="">
+        <input type="button" value="clear" id="clr" size="23" onclick="erase()" style="">
+				<br><input type='file' onchange="readURL(this);" />
+		</div>
+        <div id="container"></div>
+        <label for="pasteModalArea"></label>
+        <textarea rows="10" cols="60" id="pasteModalArea"></textarea>
+        <script src="/kineticjs-editable-text/bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="/kineticjs-editable-text/bower_components/kineticjs/kinetic.js"></script>
+        <script src="/kineticjs-editable-text/dist/kineticjs-editable-text-1.1.0.js"></script>
+        <script src="/kineticjs-editable-text/demo/basic/demo.js"></script> <!-- the magic occours here! -->
+
+  <div id="message_block" style="float:right;width:50%;height:90%px;border:3px #cccccc dashed;left-margin:1000px">
+    <ul id="messages"></ul>
+    <input id="m" autocomplete="off" style="right-border:50%; width:50%"/><br><button align="left" id="send">Send</button>
+  </div>
+  <div>
+</div>
+
+<div>
+
+</div>
+
+<!-- for legacy browsers add compatibility.js -->
+<!--<script src="../compatibility.js"></script>-->
+
+<script src="/pdf.js/build/pdf.js"></script>
+
+<script id="script">
+  //
+  // If absolute URL from the remote server is provided, configure the CORS
+  // header on that server.
+  //
+  //var url = '/pdf.js/web/compressed.tracemonkey-pldi-09.pdf';
+  //var url = 'http://infolab.stanford.edu/pub/papers/google.pdf';
+
+  //
+  // Disable workers to avoid yet another cross-origin issue (workers need
+  // the URL of the script to be loaded, and dynamically loading a cross-origin
+  // script does not work).
+  //
+  // PDFJS.disableWorker = true;
+
+  //
+  // In cases when the pdf.worker.js is located at the different folder than the
+  // pdf.js's one, or the pdf.js is executed via eval(), the workerSrc property
+  // shall be specified.
+  //
+  // PDFJS.workerSrc = '../../build/pdf.worker.js';
+
+  var pdfDoc = null,
+      pageNum = 1,
+      pageRendering = false,
+      pageNumPending = null,
+      scale = 1;
+      viewscale = 1;
+      //canvas = document.getElementById('the-canvas'),
+      //ctx = canvas.getContext('2d');
+
+  /**
+   * Get page info from document, resize canvas accordingly, and render page.
+   * @param num Page number.
+   */
+  function renderPage(num) {
+    pageRendering = true;
+    // Using promise to fetch the page
+    pdfDoc.getPage(num).then(function(page) {
+      var viewport = page.getViewport(scale);
+      //canvas.height = viewport.height;
+      //canvas.width = viewport.width;
+      console.log(viewport)
+      if (viewport.width/viewport.height >= w/h){
+          viewscale = scale/viewport.width*w; 
+          //viewport.height = w/viewport.width*viewport.height;
+          //viewport.width = w;
+      }
+      else {
+          viewscale = scale/viewport.height*h;
+          //viewport.width = h/viewport.height*viewport.width;
+          //viewport.height = h;
+      }
+      viewport = page.getViewport(viewscale)
+      console.log(viewport.height,viewport.width)
+
+      // Render PDF page into canvas context
+      var renderContext = {
+        canvasContext: ctx,
+        viewport: viewport
+      };
+      var renderTask = page.render(renderContext);
+
+      // Wait for rendering to finish
+      renderTask.promise.then(function () {
+        pageRendering = false;
+        if (pageNumPending !== null) {
+          // New page rendering is pending
+          renderPage(pageNumPending);
+          pageNumPending = null;
+        }
+        img1 = document.getElementById('background');
+        img1.src = document.getElementById('can').toDataURL("image/png");
+        socket.emit('changeBG',"url("+img1.src+")");
+        //ctx.clearRect(0,0,w,h);
+      });
+    });
+
+    // Update page counters
+    document.getElementById('page_num').textContent = pageNum;
+  }
+
+  /**
+   * If another page rendering in progress, waits until the rendering is
+   * finised. Otherwise, executes rendering immediately.
+   */
+  function queueRenderPage(num) {
+    if (pageRendering) {
+      pageNumPending = num;
+    } else {
+      renderPage(num);
+    }
+  }
+
+  /**
+   * Zoom in
+   */
+  function onZoomIn() {
+    num = pageNum;
+    pageRendering = true;
+    viewscale = viewscale*1.2
+    // Using promise to fetch the page
+    pdfDoc.getPage(num).then(function(page) {
+      var viewport = page.getViewport(viewscale);
+      //canvas.height = viewport.height;
+      //canvas.width = viewport.width;
+      console.log(viewport)
+
+      // Render PDF page into canvas context
+      var renderContext = {
+        canvasContext: ctx,
+        viewport: viewport
+      };
+      var renderTask = page.render(renderContext);
+
+      // Wait for rendering to finish
+      renderTask.promise.then(function () {
+        pageRendering = false;
+        if (pageNumPending !== null) {
+          // New page rendering is pending
+          renderPage(pageNumPending);
+          pageNumPending = null;
+        }
+        img1 = document.getElementById('background');
+        img1.src = document.getElementById('can').toDataURL("image/png");
+        socket.emit('changeBG',"url("+img1.src+")");
+        //ctx.clearRect(0,0,w,h);
+      });
+    });
+  }
+  document.getElementById('+').addEventListener('click', onZoomIn);
+
+  /**
+   * Zoom out
+   */
+
+  /**
+   * Displays previous page.
+   */
+  function onPrevPage() {
+    if (pageNum <= 1) {
+      return;
+    }
+    pageNum--;
+    queueRenderPage(pageNum);
+  }
+  document.getElementById('prev').addEventListener('click', onPrevPage);
+
+  /**
+   * Displays next page.
+   */
+  function onNextPage() {
+    if (pageNum >= pdfDoc.numPages) {
+      return;
+    }
+    pageNum++;
+    queueRenderPage(pageNum);
+  }
+  document.getElementById('next').addEventListener('click', onNextPage);
+
+  /**
+   * Asynchronously downloads PDF.
+   */
+  function showPDF(url) {
+    PDFJS.getDocument(url).then(function (pdfDoc_) {
+      pdfDoc = pdfDoc_;
+      console.log(pdfDoc)
+      document.getElementById('page_count').textContent = pdfDoc.numPages;
+
+      // Initial/first page rendering
+      renderPage(pageNum);
+    });
+  }
+</script>
+
+</body>
+</html>
+</body>
+</html>
